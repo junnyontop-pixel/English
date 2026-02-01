@@ -1,0 +1,214 @@
+/* App.css 상단에 추가 */
+:root {
+  color-scheme: light; /* 강제로 라이트 모드 고정 */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f0f2f5; /* 연한 회색 배경 */
+  color: #333 !important; /* 글씨색 검정으로 강제 */
+}
+
+h1 {
+  color: #1a1a1a !important;
+}
+
+.eng-text {
+  color: #222 !important;
+  font-size: 1.8rem;
+}
+
+.card-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+/* 2. 카드 컨테이너 위치 중앙 정렬 (영상에서 치우쳐 보여서 추가) */
+.card-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* App.css */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.card-container {
+  width: 340px;
+  height: 240px;
+  perspective: 1200px; /* 원근감을 조금 더 줬어 */
+  margin: 30px auto;
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d; /* 3D 효과 유지 핵심! */
+  cursor: pointer;
+}
+
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden; /* 뒤집었을 때 뒷면 안 보이게 */
+  -webkit-backface-visibility: hidden; /* 사파리/크롬 호환성 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 24px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+  padding: 20px;
+  background: white;
+  border: 1px solid #eee;
+  box-sizing: border-box;
+}
+
+/* 앞면 설정: 0도 */
+.card-front {
+  transform: rotateY(0deg);
+  z-index: 2; /* 앞면이 위로 오도록 */
+}
+
+/* 뒷면 설정: 180도 뒤집힌 상태 */
+.card-back {
+  transform: rotateY(180deg);
+  background-color: #f0f7ff;
+  color: #007bff;
+  z-index: 1;
+}
+
+/* 텍스트 스타일: 흔들림과 가독성 방지 */
+.eng-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  color: #1a1a1a !important; /* 글씨색 강제 */
+  word-break: keep-all;
+  margin-bottom: 20px;
+  width: 100%;
+}
+.kor-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  color: #1a1a1a !important; /* 글씨색 강제 */
+  word-break: keep-all;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.speak-btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  background: #333;
+  color: white;
+  cursor: pointer;
+}
+
+.controls { display: flex; align-items: center; gap: 20px; }
+.controls button {
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: none;
+  background: #007bff;
+  color: white;
+  font-weight: bold;
+}
+.controls button:disabled { background: #ccc; }
+
+/* App.css 추가/수정 */
+.progress-container { width: 340px; height: 6px; background: #eee; border-radius: 10px; margin-bottom: 20px; }
+.progress-bar { height: 100%; background: #007bff; transition: 0.3s; }
+
+.badge { background: #e3f2fd; color: #1976d2; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+
+.reading-text {
+  font-size: 1.1rem; /* 독해 문장은 조금 작게 */
+  line-height: 1.6;
+  text-align: center;
+  padding: 0 10px;
+}
+
+.action-btns { display: flex; gap: 10px; margin-top: 20px; }
+.action-btns button { padding: 8px 16px; border-radius: 12px; border: 1px solid #ddd; background: white; cursor: pointer; }
+.listening { background: #ff4757 !important; color: white !important; animation: pulse 1.5s infinite; }
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+.mic-btn {
+  padding: 10px 20px;
+  background-color: #4A90E2; /* 기본 파란색 */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  transition: all 0.3s ease; /* 부드럽게 변하도록 */
+}
+
+.mic-btn.active {
+  background-color: #FF4757; /* 듣는 중일 땐 빨간색! */
+  transform: scale(1.1); /* 살짝 커지게 */
+}
+
+.result-box {
+  min-height: 100px; /* 텍스트 두 줄 정도 들어갈 공간 확보 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 내용이 없어도 중앙 유지 */
+  margin: 20px 0;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+/* 2. 버튼 그룹을 하단에 안정적으로 배치 */
+.btn-group {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  height: 50px; /* 버튼 영역 높이 고정 */
+}
+
+/* 3. 텍스트가 없을 때도 공간을 차지하게 함 */
+.user-speech, .result-msg {
+  margin: 5px 0;
+  min-height: 24px; /* 글자가 없어도 높이 유지 */
+}
+
+/* 4. 성공/실패 메시지 색상 구분 (가시성 결과 최대화) */
+.success {
+  color: #2ecc71;
+  font-weight: bold;
+}
+
+.fail {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  height: 50px; /* 버튼 영역 높이 고정 */
+}

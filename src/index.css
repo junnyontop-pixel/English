@@ -1,0 +1,16 @@
+/* App.css 상단 */
+#root {
+  width: 100vw; /* 가로 화면 꽉 채우기 */
+  margin: 0;
+  padding: 0;
+  display: block; /* 이상한 레이아웃 분할 방지 */
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #f0f2f5; /* 이제 옆면도 이 색으로 바뀔 거야 */
+}
