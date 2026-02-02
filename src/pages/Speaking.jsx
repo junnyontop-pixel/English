@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { speakingData } from '../data/Data';
-import '../App.css';
+import './Speaking.css';
 
 const Speaking = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
