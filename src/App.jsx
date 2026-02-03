@@ -21,7 +21,7 @@ function App() {
         <Route path="/" element={
           <header className="home-header">
             <h1>⚡ 가성비 영어 학습 서비스</h1>
-            <p>원하는 학습 모드를 선택해봐, 유준아!</p>
+            <p>원하는 학습 모드를 선택해!</p
             <div id="studyBtn_container">
               <button className="controls button" id='studyBtn' onClick={() => navigate("/voca")}>📖단어 공부 시작하기📖</button>
               <button id='studyBtn' onClick={() => navigate("/reading")}>📒스크램블 시작하기📒</button>
