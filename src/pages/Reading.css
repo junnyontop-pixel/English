@@ -58,6 +58,16 @@
   animation: fadeIn 0.3s ease-in;
 }
 
+/* 한글 설명 */
+/* 폰트 좀더 굵게 */
+
+.kor-hint {
+  margin-top: 15px;
+  font-size: 1.3rem;
+  color: #000000;
+  font-weight: 600;
+}
+
 /* 아래쪽 단어 풀 */
 .word-pool {
   min-height: 100px; /* 단어가 빠져나가도 높이 유지 */

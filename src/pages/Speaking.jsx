@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
-import { speakingData } from '../data/Data';
 import './Speaking.css';
 
-const Speaking = () => {
+const Speaking = ({data}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userText, setUserText] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [result, setResult] = useState("");
-  const currentData = speakingData[currentIndex];
+
+  if (!data) {
+        return <div className="app-container">학습 데이터를 불러오는 중입니다...</div>;
+  }
+
+  const studyList = Array.isArray(data) ? data : data.data;
+
+  const currentData = studyList[currentIndex];
 
   const startListening = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -15,7 +21,7 @@ const Speaking = () => {
 
     const recognition = new SpeechRecognition();
     recognition.lang = 'en-US';
-    recognition.interimResults = true; // 실시간으로 변하는 걸 보여줘야 유준이가 덜 답답해!
+    recognition.interimResults = true;
 
     recognition.onstart = () => {
       setIsListening(true);
@@ -91,8 +97,31 @@ const Speaking = () => {
       </div>
 
       <div className="controls">
-        <button onClick={() => {if(currentIndex > 0) {setCurrentIndex(c=>c-1); setUserText(""); setResult("");}}}>이전</button>
-        <button onClick={() => {if(currentIndex < speakingData.length-1) {setCurrentIndex(c=>c+1); setUserText(""); setResult("");}}}>다음</button>
+        <button 
+          onClick={() => {
+            if(currentIndex > 0) {
+              setCurrentIndex(c => c - 1); 
+              setUserText(""); 
+              setResult("");
+            }
+          }}
+          disabled={currentIndex === 0}
+        >
+          이전
+        </button>
+        <span className="page-number">{currentIndex + 1} / {studyList.length}</span>
+        <button 
+          onClick={() => {
+            if(currentIndex < studyList.length - 1) { // 👈 여기를 수정!
+              setCurrentIndex(c => c + 1); 
+              setUserText(""); 
+              setResult("");
+            }
+          }}
+          disabled={currentIndex === studyList.length - 1}
+        >
+          다음
+        </button>
       </div>
     </div>
   );

@@ -2,20 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { speakingData } from '../data/Data';
 import './Reading.css';
 
-const Reading = () => {
+const Reading = ({data}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const currentData = speakingData[currentIndex];
-  
-  // 퀴즈용 상태 관리
   const [shuffledWords, setShuffledWords] = useState([]);
   const [userAnswer, setUserAnswer] = useState([]);
 
-  // 데이터 바뀔 때마다 단어 섞기 (최소 노력 효율화)
+  // 데이터 가공 로직 (data가 있을 때만 작동하게 안전장치 추가)
+  const studyList = data ? (Array.isArray(data) ? data : data.data) : [];
+  const currentData = studyList[currentIndex];
+
   useEffect(() => {
-    const words = currentData.eng.split(" ");
-    setShuffledWords([...words].sort(() => Math.random() - 0.5));
-    setUserAnswer([]);
-  }, [currentIndex, currentData.eng]);
+    // currentData와 eng가 확실히 있을 때만 실행하도록 체크!
+    if (currentData?.eng) { 
+      const words = currentData.eng.split(" ");
+      setShuffledWords([...words].sort(() => Math.random() - 0.5));
+      setUserAnswer([]);
+    }
+  }, [currentIndex, currentData?.eng]); // 의존성 배열에도 안전장치 추가
+
+  // 3. 로딩 및 예외 처리 (모든 훅 선언 이후에 위치!)
+  if (!data || !currentData) {
+    return <div className="app-container">학습 데이터를 불러오는 중입니다...</div>;
+  }
 
   // 🔊 TTS 기능: 클릭한 단어/문장 읽어주기
   const speak = (text) => {
@@ -78,8 +86,27 @@ const Reading = () => {
       </div>
 
       <div className="controls">
-        <button onClick={() => setCurrentIndex(c => Math.max(0, c - 1))}>이전</button>
-        <button onClick={() => setCurrentIndex(c => Math.min(speakingData.length - 1, c + 1))}>다음</button>
+        <button 
+          onClick={() => {
+            if(currentIndex > 0) {
+              setCurrentIndex(c => c - 1); 
+            }
+          }}
+          disabled={currentIndex === 0}
+        >
+          이전
+        </button>
+        <span className="page-number">{currentIndex + 1} / {studyList.length}</span>
+        <button 
+          onClick={() => {
+            if(currentIndex < studyList.length - 1) { // 👈 여기를 수정!
+              setCurrentIndex(c => c + 1); 
+            }
+          }}
+          disabled={currentIndex === studyList.length - 1}
+        >
+          다음
+        </button>
       </div>
     </div>
   );

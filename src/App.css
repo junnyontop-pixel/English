@@ -222,3 +222,46 @@ h1 {
   transform: translateY(-2px);
   transition: all 0.2s ease;
 }
+
+.profile-img {
+  width: 40px;      /* 적당한 크기 */
+  height: 40px;
+  border-radius: 50%; /* 동그랗게 */
+  object-fit: cover;  /* 이미지 비율 유지 */
+  border: 2px solid #ddd;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+/* 네비바 우측 정렬 정리 */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+}
+
+/* 왼쪽을 조금더 띄우기 */
+/* 왜 안띄어지지? */
+#auth-button-container {
+  display: flex;
+  padding-left: 15px;
+}
+
+.auth-button {
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid #007bff;
+  background: none;
+  color: #007bff !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-link {
+  margin-right: 15px;
+}
