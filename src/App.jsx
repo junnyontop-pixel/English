@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
-import Voca from './pages/voca';
+import Voca from './pages/Voca';
 import Speaking from './pages/Speaking';
 import Reading from './pages/Reading';
 import SetSelector from './pages/SetSelector';
