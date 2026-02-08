@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { supabase } from '../supabase';
 import { useNavigate } from 'react-router-dom';
 
-const SetAdmin = () => {
+const SetAdmin = ({ user }) => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [wordList, setWordList] = useState([]); // [{id, eng, kor}] 형태로 저장
@@ -37,7 +37,7 @@ const SetAdmin = () => {
 
     const { error } = await supabase
       .from('study_sets')
-      .insert([{ title, data: wordList }]);
+      .insert([{ title, data: wordList, user_id: user.id }]); // user_id 추가
 
     if (error) alert("실패: " + error.message);
     else {

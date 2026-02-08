@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
-import Voca from './pages/Voca';
+import Voca from './pages/voca';
 import Speaking from './pages/Speaking';
 import Reading from './pages/Reading';
 import SetSelector from './pages/SetSelector';
 import SetDetail from './pages/SetDetail';
 import SetAdmin from './pages/SetAdmin';
 import './App.css';
+
+import SetStore from './pages/SetStore';
 
 // supabase 불러오기
 import { supabase } from './supabase';
@@ -18,6 +20,8 @@ function App() {
   
   // 🟢 1. 로그인 유저 상태 추가
   const [user, setUser] = useState(null);
+
+  const [currentSet, setCurrentSet] = useState(null);
 
   useEffect(() => {
     fetchSetsFromSupabase();
@@ -31,12 +35,27 @@ function App() {
   }, []);
 
   const fetchSetsFromSupabase = async () => {
-    const { data, error } = await supabase.from('study_sets').select('*');
+    // 1. 세션에서 유저를 직접 가져오는 게 가장 안전해
+    const { data: { user: currentUser } } = await supabase.auth.getUser();
+
+    if (!currentUser) {
+      console.log("로그인이 안 돼서 전체 데이터를 불러올게.");
+      const { data, error } = await supabase.from('study_sets').select('*');
+      if (!error) setAllSets(data);
+      return; 
+    }
+
+    // 2. 유저가 있을 때만 실행 (?.를 쓰면 currentUser가 null이어도 에러 안 남)
+    const { data, error } = await supabase
+      .from('study_sets')
+      .select('*')
+      .eq('user_id', currentUser?.id);
+
     if (error) {
-      console.error("데이터 못 가져옴 ㅠㅠ:", error);
+      console.error("데이터 로딩 실패:", error.message);
     } else {
-      setAllSets(data);
-      if (data.length > 0) setCurrentStudyData(data[0].data);
+      setAllSets(data || []);
+      if (data && data.length > 0) setCurrentStudyData(data[0].data);
     }
   };
 
@@ -95,14 +114,33 @@ function App() {
           </header>
         } />
         
-        <Route path="/voca" element={<Voca data={currentStudyData} />} />
-        <Route path="/speaking" element={<Speaking data={currentStudyData} />} />
-        <Route path="/reading" element={<Reading data={currentStudyData} />} />
-        <Route path="/set-selector" element={<SetSelector sets={allSets} onSelectSet={setCurrentStudyData} />} />
-        <Route path="/set-detail" element={<SetDetail currentSet={currentStudyData} />} />
+        {/* 1. 단어장 모드 */}
+        <Route path="/voca" element={<Voca data={currentSet?.data || currentStudyData} />} />
+
+        {/* 2. 스피킹 모드 */}
+        <Route path="/speaking" element={<Speaking data={currentSet?.data || currentStudyData} />} />
+
+        {/* 3. 스크램블(리딩) 모드 */}
+        <Route path="/reading" element={<Reading data={currentSet?.data || currentStudyData} />} />
+        <Route 
+          path="/set-selector" 
+          element={
+            <SetSelector 
+              sets={allSets} 
+              onSelectSet={(selected) => {
+                console.log("새로 선택된 세트:", selected); // 👈 콘솔에 새 데이터가 찍히는지 확인!
+                setCurrentSet(selected); // 👈 여기서 상태를 갈아끼워야 해!
+              }} 
+              navigate={navigate} 
+            />
+          } 
+        />
+        <Route path="/set-detail" element={<SetDetail currentSet={currentSet} />} />
         
         {/* 🟢 6. 로그인 안 한 사람은 어드민 접근 불가 (보안 가성비!) */}
-        <Route path="/admin" element={user ? <SetAdmin /> : <div className="app-container">로그인이 필요해!</div>} />
+        <Route path="/admin" element={user ? <SetAdmin user={user} /> : <div className="app-container">로그인이 필요해!</div>} />
+
+        <Route path="/store" element={<SetStore />} />
       </Routes>
     </div>
   );
